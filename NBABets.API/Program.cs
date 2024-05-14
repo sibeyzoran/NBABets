@@ -30,6 +30,12 @@ namespace NBABets.API
 
             app.MapControllers();
 
+            // Setup database + tables if it hasn't been created
+            using (AppDBContext dbContext = new AppDBContext())
+            {
+                dbContext.Database.EnsureCreated();
+            }
+
             app.Run();
         }
     }
