@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34825.169
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBABets.UI", "NBABets.UI\NBABets.UI.csproj", "{ED5AE654-3F11-41BE-9B37-5C10560BC6E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBABets.Services", "NBABets.Services\NBABets.Services.csproj", "{673EFCD0-AF7E-4AE6-BD06-A079C2FE0936}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBABets.API", "NBABets.API\NBABets.API.csproj", "{F8A7BC68-5E2A-4234-B659-B57119B3661C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBABets.Client", "NBABets.Client\NBABets.Client.csproj", "{40FEBF89-06DA-4D12-96B9-0B66D8EA9125}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBABets.Models", "NBABets.Models\NBABets.Models.csproj", "{FA4A60B0-3529-455E-B130-97C5C15DBEB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBABets.Tests.Unit", "NBABets.Tests.Unit\NBABets.Tests.Unit.csproj", "{F9511B1A-99A9-4C15-AE8F-7A6BCD934309}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ED5AE654-3F11-41BE-9B37-5C10560BC6E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED5AE654-3F11-41BE-9B37-5C10560BC6E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED5AE654-3F11-41BE-9B37-5C10560BC6E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED5AE654-3F11-41BE-9B37-5C10560BC6E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{673EFCD0-AF7E-4AE6-BD06-A079C2FE0936}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{673EFCD0-AF7E-4AE6-BD06-A079C2FE0936}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{673EFCD0-AF7E-4AE6-BD06-A079C2FE0936}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{673EFCD0-AF7E-4AE6-BD06-A079C2FE0936}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8A7BC68-5E2A-4234-B659-B57119B3661C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8A7BC68-5E2A-4234-B659-B57119B3661C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8A7BC68-5E2A-4234-B659-B57119B3661C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8A7BC68-5E2A-4234-B659-B57119B3661C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40FEBF89-06DA-4D12-96B9-0B66D8EA9125}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40FEBF89-06DA-4D12-96B9-0B66D8EA9125}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40FEBF89-06DA-4D12-96B9-0B66D8EA9125}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40FEBF89-06DA-4D12-96B9-0B66D8EA9125}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA4A60B0-3529-455E-B130-97C5C15DBEB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA4A60B0-3529-455E-B130-97C5C15DBEB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA4A60B0-3529-455E-B130-97C5C15DBEB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA4A60B0-3529-455E-B130-97C5C15DBEB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9511B1A-99A9-4C15-AE8F-7A6BCD934309}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9511B1A-99A9-4C15-AE8F-7A6BCD934309}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9511B1A-99A9-4C15-AE8F-7A6BCD934309}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9511B1A-99A9-4C15-AE8F-7A6BCD934309}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1458603C-D50E-452E-A890-D6CD3CF8295B}
+	EndGlobalSection
+EndGlobal
