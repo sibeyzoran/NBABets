@@ -125,14 +125,14 @@ namespace NBABets.Tests.Unit
         {
             // Arrange
             IUserAdapter usersAdapter = new UsersAdapter();
-            var getUser = usersAdapter.Get("Michael Jordan");
-            getUser?.BetsPlaced?.RemoveAt(1);
+            var getUser = usersAdapter.Get("Luka Doncic");
+            getUser?.BetsPlaced?.RemoveAt(0);
 
             // Act
             usersAdapter.Edit(getUser);
 
             // Assert
-            var result = usersAdapter.Get("Michael Jordan");
+            var result = usersAdapter.Get("Luka Doncic");
             result?.BetsPlaced?.Count.ShouldBe(0);
         }
 
@@ -156,30 +156,17 @@ namespace NBABets.Tests.Unit
         public void SuccessfullyDeleteUser()
         {
             // Arrange
-            // Add user "Tony Hawk" to database
-            SuccessfullyAddUser();
-
-            // Data adapter
             IUserAdapter usersAdapter = new UsersAdapter();
+
             // Variables
             string toDelete = "Tony Hawk";
-            string db = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "NBABets.db");
-            string connectionString = $"Data Source={db};Version=3;";
 
             // Act
             usersAdapter.Delete(toDelete);
+            var result = usersAdapter.Get(toDelete);
 
             // Assert
-            using (var connection = new SQLiteConnection(connectionString))
-            {
-                connection.Open();
-                using (var command = new SQLiteCommand("SELECT COUNT(*) FROM Users WHERE Name = @Name", connection))
-                {
-                    command.Parameters.AddWithValue("@Name", toDelete);
-                    int count = Convert.ToInt32(command.ExecuteScalar());
-                    count.ShouldBe(0);
-                }
-            }
+            result.ShouldBeNull();
         }
     }
 }

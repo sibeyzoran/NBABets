@@ -136,7 +136,7 @@ namespace NBABets.Services
 
         public User? Get(string IDorName)
         {
-            var result = new User();
+            User? result = null;
             using (var connection = new SQLiteConnection(_connectionString))
             {
                 try
@@ -170,6 +170,7 @@ namespace NBABets.Services
                             var name = reader["Name"].ToString();
                             var betsPlacedString = reader["BetsPlaced"].ToString();
 
+                            result = new User();
                             result.ID = id;
                             result.Name = name;
                             // Split bets placed into a list of Guids
