@@ -17,10 +17,15 @@ namespace NBABets.API
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Users table
             modelBuilder.Entity<User>().HasKey(u => u.ID);
+            modelBuilder.Entity<User>()
+                .Property(u => u.BetsPlaced)
+                .IsRequired(false);
+            // Games Tables
             modelBuilder.Entity<Game>().HasKey(g => g.ID);
+            // Bets table
             modelBuilder.Entity<Bet>().HasKey(b => b.ID);
-
         }
     }
 }

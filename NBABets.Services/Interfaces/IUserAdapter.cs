@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace NBABets.Services
 {
-    public interface IDatabaseAdapter<T>
+    public interface IUserAdapter
     {
         /// <summary>
         /// Adds a game, user or bet to the Type<T> table SQL database
         /// </summary>
         /// <param name="item"></param>
-        void Add(T item);
+        void Add(User item);
         /// <summary>
         /// Edits a game, user or bet entry in the Type<T> table SQL database
         /// </summary>
         /// <param name="item"></param>
-        void Edit(T item);
+        void Edit(User item);
         /// <summary>
         /// Removes a game, user or bet entry in the Type<T> table SQL database
         /// </summary>
@@ -28,11 +28,11 @@ namespace NBABets.Services
         /// </summary>
         /// <param name="IDorName"></param>
         /// <returns></returns>
-        T Get(string IDorName);
+        User? Get(string IDorName);
         /// <summary>
         /// Gets all the entries in a single table
         /// </summary>
         /// <returns></returns>
-        List<T> GetAll();
+        List<User> GetAll();
     }
 }
