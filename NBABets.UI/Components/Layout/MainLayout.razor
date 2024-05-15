@@ -1,23 +1,29 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+<FluentLayout Style="display:flex; height:auto; align-items: center;">
+    <FluentHeader Style="background-color:white; color: black;">
+        <img src="images/spinningball.gif" alt="Loading..." style="width: 75px; height: 75px;" />
+        <h1>NBA Bets</h1>
+    </FluentHeader>
+    <FluentBodyContent>
+        <FluentStack Orientation="Orientation.Horizontal" Style="justify-content: space-between;">
+            <main style="width:auto;">
+                <div class="content">
+                    <article id="article">
+                        @Body
+                    </article>
+                </div>
+                <FluentToastProvider @rendermode="RenderMode.InteractiveServer" />
+                <FluentDialogProvider @rendermode="RenderMode.InteractiveServer" />
+            </main>
+        </FluentStack>
+    </FluentBodyContent>
+    <FluentFooter>
+        <div class="link1">
+            Created by James Martin  
         </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
-
-<div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
-</div>
+        <div class="link2">
+            <a href="https://github.com/sibeyzoran/NBABets" target="_blank">GitHub</a>
+        </div>
+    </FluentFooter>
+</FluentLayout>

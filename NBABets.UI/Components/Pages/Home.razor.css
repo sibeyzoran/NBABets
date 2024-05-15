@@ -1,0 +1,28 @@
+﻿.landing-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100rem;
+    height: 50rem;
+    text-align: center;
+}
+
+.betting-tiles {
+    flex: 1;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+.tile {
+    border: 0px solid #ccc;
+    border-radius: 9px;
+    padding: 2rem;
+    width: 100rem; 
+    height: 50rem;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    text-align: left;
+}

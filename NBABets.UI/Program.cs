@@ -1,4 +1,6 @@
 using NBABets.UI.Components;
+using Serilog;
+
 
 namespace NBABets.UI
 {
@@ -8,9 +10,18 @@ namespace NBABets.UI
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Setup Logger
+            string logPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs\\UI.log");
+            Log.Logger = new LoggerConfiguration()
+                 .WriteTo.File(logPath)
+                 .Enrich.FromLogContext()
+                 .MinimumLevel.Error()
+                 .CreateLogger();
+
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+            builder.Services.AddNBABetsUIServices();
 
             var app = builder.Build();
 
@@ -25,6 +36,7 @@ namespace NBABets.UI
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();
+            app.UseRouting();
             app.UseAntiforgery();
 
             app.MapRazorComponents<App>()

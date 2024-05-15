@@ -1,7 +1,59 @@
-﻿@page "/"
+﻿@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Authorization
 
-<PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
+@inject IDialogService dialogService
+@inject ApplicationState appState
 
-Welcome to your new app.
+@page "/"
+
+@rendermode RenderMode.InteractiveServer
+
+<div class="landing-container">
+    <div class="betting-tiles">
+        <FluentCard>
+            <FluentTabs @bind-ActiveTabID="@activeid" OnTabChange="HandleOnTabChange">
+                <FluentTab Label="Games" id="games">
+                    
+                </FluentTab>
+                <FluentTab Label="Bets" id="bets">
+
+                </FluentTab>
+            </FluentTabs>
+        </FluentCard>
+    </div>
+
+</div>
+
+
+@code
+{
+    private string? activeid = "games";
+    private FluentTab? changedto;
+    private PaginationState paginationGames = new PaginationState { ItemsPerPage = 8 };
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Get the username
+            var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+            var user = authstate.User;
+            string userName = user.Identity.Name;
+
+            // call the authorise api function via client
+            using (var HttpClient = new HttpClient())
+            {
+                UserClient userClient = new UserClient(HttpClient);
+                UserDto userDto = await userClient.AuthoriseUser(userName);
+                appState.SetCurrentUser(userDto);
+            }
+        }
+    }
+
+    private void HandleOnTabChange(FluentTab tab)
+    {
+        changedto = tab;
+    }
+}
