@@ -257,11 +257,13 @@ namespace NBABets.Services
                                 ID = Guid.Parse(reader["ID"].ToString()),
                                 Name = reader["Name"].ToString(),
                                 StartDate = DateTime.Parse(reader["StartDate"].ToString()),
-                                EndDate = DateTime.Parse(reader["EndDate"].ToString()),
                                 Status = reader["Status"].ToString(),
                                 Score = reader["Score"].ToString()
                             };
-
+                            if (reader["EndDate"].ToString() != "")
+                            {
+                                game.EndDate = DateTime.Parse(reader["EndDate"].ToString());
+                            }
                             result.Add(game);
                         }
                     }
