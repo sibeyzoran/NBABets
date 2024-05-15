@@ -61,7 +61,7 @@ namespace NBABets.API
         }
 
         [HttpPost("add", Name = "AddBet")]
-        public ActionResult AddBet([FromBody] BetDto bet)
+        public ActionResult<BetDto> AddBet([FromBody] BetDto bet)
         {
             // convert betDto into a regular bet
             Bet toAdd = new Bet()
@@ -75,9 +75,12 @@ namespace NBABets.API
             };
 
             _betsAdapter.Add(toAdd);
-            if (_betsAdapter.Get(toAdd.ID.ToString()) != null)
+            var result = _betsAdapter.Get(toAdd.ID.ToString());
+            if (result != null)
             {
-                return Ok();
+                BetMapRequest request = new BetMapRequest() { bet = result };
+                var mappedRequest = _betsMapper.Map(request);
+                return mappedRequest;
             }
 
             _log.Information($"Error adding bet: {bet.ID}");
@@ -90,7 +93,7 @@ namespace NBABets.API
         /// <param name="bet"></param>
         /// <returns>Returns Ok always - probably needs to be changed at some point</returns>
         [HttpPut("editbet", Name = "EditBet")]
-        public ActionResult EditBet([FromBody] BetDto bet)
+        public ActionResult<bool> EditBet([FromBody] BetDto bet)
         {
             // convert betDto into a regular bet
             Bet toEdit = new Bet()
@@ -105,14 +108,24 @@ namespace NBABets.API
 
             _betsAdapter.Edit(toEdit);
 
-            return Ok();
+            var check = _betsAdapter.Get(bet.ID.ToString());
+
+            if (bet.Amount == check.Amount)
+            {
+                return true;
+            }
+            return false;
         }
 
         [HttpDelete("delete/{IDorName}", Name = "DeleteBet")]
-        public ActionResult DeleteBet([FromRoute] string IDorName)
+        public ActionResult<bool> DeleteBet([FromRoute] string IDorName)
         {
             _betsAdapter.Delete(IDorName);
-            return Ok();
+            var check = _betsAdapter.Get(IDorName);
+            if (check == null)
+                return true;
+
+            return false;
         }
 
     }

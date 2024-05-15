@@ -7,7 +7,7 @@ using ILogger = Serilog.ILogger;
 namespace NBABets.API
 {
     [ApiController]
-    [Route("user")]
+    [Route("users")]
     public class UserController : ControllerBase
     {
         private readonly ILogger _log;
