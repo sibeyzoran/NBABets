@@ -24,6 +24,9 @@ namespace NBABets.API
                 .IsRequired(false);
             // Games Tables
             modelBuilder.Entity<Game>().HasKey(g => g.ID);
+            modelBuilder.Entity<Game>()
+                .Property(g => g.EndDate)
+                .IsRequired(false);
             // Bets table
             modelBuilder.Entity<Bet>().HasKey(b => b.ID);
         }

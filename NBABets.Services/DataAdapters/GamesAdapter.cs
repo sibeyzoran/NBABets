@@ -33,11 +33,13 @@ namespace NBABets.Services
                     connection.Open();
 
                     // Craft sql command
-                    var command = new SQLiteCommand("INSERT INTO Games (ID, Name, Date, IsOpen) VALUES (@ID, @Name, @Date, @IsOpen)", connection);
+                    var command = new SQLiteCommand("INSERT INTO Games (ID, Name, StartDate, EndDate, Status, Score) VALUES (@ID, @Name, @StartDate, @EndDate, @Status, @Score)", connection);
                     command.Parameters.AddWithValue("@ID", item.ID.ToString());
                     command.Parameters.AddWithValue("@Name", item.Name);
-                    command.Parameters.AddWithValue("@Date", item.Date.ToString());
-                    command.Parameters.AddWithValue("@IsOpen", Convert.ToInt32(item.IsOpen));
+                    command.Parameters.AddWithValue("@StartDate", item.StartDate.ToString());
+                    command.Parameters.AddWithValue("@EndDate", item.EndDate.ToString());
+                    command.Parameters.AddWithValue("@Status", item.Status);
+                    command.Parameters.AddWithValue("@Score", item.Score);
 
                     // Execute command
                     command.ExecuteNonQuery();
@@ -95,16 +97,70 @@ namespace NBABets.Services
                     // Open
                     connection.Open();
 
-                    // Craft command
-                    var command = new SQLiteCommand("UPDATE Games SET IsOpen = @IsOpen WHERE ID = @ID", connection);
-                    command.Parameters.AddWithValue("@IsOpen", Convert.ToInt32(item.IsOpen));
-                    command.Parameters.AddWithValue("@ID", item.ID.ToString());
+                    // Retrieve current values from the database
+                    var selectCommand = new SQLiteCommand("SELECT Status, Score, EndDate FROM Games WHERE ID = @ID", connection);
+                    selectCommand.Parameters.AddWithValue("@ID", item.ID.ToString());
 
-                    _log.Information($"Editing {item.Name}'s open status");
+                    using (var reader = selectCommand.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            string currentStatus = reader["Status"].ToString();
+                            string currentScore = reader["Score"].ToString();
+                            string currentEndDate = reader["EndDate"].ToString();
+                            DateTime? convertedEndDate = null;
+                            if (currentEndDate != "")
+                            {
+                                convertedEndDate = Convert.ToDateTime(currentEndDate);
+                            }
+                            
 
-                    // Execute
-                    command.ExecuteNonQuery();
-                    _log.Information($"{item.Name} successfully edited.");
+                            // Compare with new values
+                            bool statusChanged = currentStatus != item.Status;
+                            bool scoreChanged = currentScore != item.Score;
+                            bool endDateChanged = convertedEndDate != item.EndDate;
+
+                            // If any value has changed, update the corresponding column in the database
+                            if (statusChanged || scoreChanged || endDateChanged)
+                            {
+                                var updateCommand = new SQLiteCommand("UPDATE Games SET", connection);
+                                if (statusChanged)
+                                    updateCommand.CommandText += " Status = @Status,";
+                                if (scoreChanged)
+                                    updateCommand.CommandText += " Score = @Score,";
+                                if (endDateChanged)
+                                    updateCommand.CommandText += " EndDate = @EndDate,";
+
+                                // Remove the trailing comma
+                                updateCommand.CommandText = updateCommand.CommandText.TrimEnd(',');
+
+                                // Add parameters for changed values
+                                if (statusChanged)
+                                    updateCommand.Parameters.AddWithValue("@Status", item.Status);
+                                if (scoreChanged)
+                                    updateCommand.Parameters.AddWithValue("@Score", item.Score);
+                                if (endDateChanged)
+                                    updateCommand.Parameters.AddWithValue("@EndDate", item.EndDate);
+
+                                updateCommand.CommandText += " WHERE ID = @ID";
+                                updateCommand.Parameters.AddWithValue("@ID", item.ID.ToString());
+
+                                _log.Information($"Editing {item.Name}'s");
+
+                                // Execute
+                                updateCommand.ExecuteNonQuery();
+                                _log.Information($"{item.Name} successfully edited.");
+                            }
+                            else
+                            {
+                                _log.Information($"No changes to {item.Name}.");
+                            }
+                        }
+                        else
+                        {
+                            _log.Error($"Game with ID {item.ID} not found.");
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -127,8 +183,8 @@ namespace NBABets.Services
 
                     // Craft 
                     var commandText = Guid.TryParse(IDorName, out var ID)
-                        ? "SELECT ID, Name, Date, IsOpen FROM Games Where ID = @ID"
-                        : "SELECT ID,  Name, Date, IsOpen FROM Games Where Name = @Name";
+                        ? "SELECT ID, Name, StartDate, Status, Score, EndDate FROM Games Where ID = @ID"
+                        : "SELECT ID,  Name, StartDate, Status, Score, EndDate FROM Games Where Name = @Name";
                     var command = new SQLiteCommand(commandText, connection);
 
                     if (ID != Guid.Empty)
@@ -147,18 +203,23 @@ namespace NBABets.Services
                         {
                             var id = Guid.Parse(reader["ID"].ToString());
                             var name = reader["Name"].ToString();
-                            var date = DateTime.Parse(reader["Date"].ToString());
-                            var isOpenString = reader["IsOpen"].ToString();
-                            var isOpenInt = Convert.ToInt32(isOpenString);
-                            var isOpenBool = Convert.ToBoolean(isOpenInt);
+                            var startdate = DateTime.Parse(reader["StartDate"].ToString());
+                            var enddate = reader["EndDate"].ToString();
+                            var status = reader["Status"].ToString();
+                            var score = reader["Score"].ToString();
 
                             result = new Game() 
                             { 
                                 ID = id,
                                 Name = name,
-                                Date = date,
-                                IsOpen = isOpenBool
+                                StartDate = startdate,
+                                Score = score,
+                                Status = status
                             };
+                            if (enddate != "")
+                            {
+                                result.EndDate = DateTime.Parse(reader["EndDate"].ToString());
+                            }
                             _log.Information($"Successfully returned game: {IDorName}");
                         }
                     }
@@ -195,12 +256,12 @@ namespace NBABets.Services
                             {
                                 ID = Guid.Parse(reader["ID"].ToString()),
                                 Name = reader["Name"].ToString(),
-                                Date = DateTime.Parse(reader["Date"].ToString()),
+                                StartDate = DateTime.Parse(reader["StartDate"].ToString()),
+                                EndDate = DateTime.Parse(reader["EndDate"].ToString()),
+                                Status = reader["Status"].ToString(),
+                                Score = reader["Score"].ToString()
                             };
-                            var isOpenString = reader["IsOpen"].ToString();
-                            var isOpenInt = Convert.ToInt32(isOpenString);
-                            var isOpenBool = Convert.ToBoolean(isOpenInt);
-                            game.IsOpen = isOpenBool;
+
                             result.Add(game);
                         }
                     }

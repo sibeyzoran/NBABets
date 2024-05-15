@@ -1,3 +1,5 @@
+using NBABets.Services;
+using Serilog;
 
 namespace NBABets.API
 {
@@ -7,10 +9,23 @@ namespace NBABets.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Setup Logger
+            string logPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs\\API.log");
+            Log.Logger = new LoggerConfiguration()
+                 .WriteTo.File(logPath)
+                 .Enrich.FromLogContext()
+                 .MinimumLevel.Debug()
+                 .CreateLogger();
 
+            // Add services to the container.
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+            });
+
+            builder.Services.AddNBABetsApi();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 

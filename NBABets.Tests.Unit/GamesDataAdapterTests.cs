@@ -15,8 +15,10 @@ namespace NBABets.Tests.Unit
             {
                 ID = Guid.NewGuid(),
                 Name = "Brooklyn Nets vs Minnesota Timberwolves",
-                Date = DateTime.Now,
-                IsOpen = true
+                StartDate = DateTime.Now,
+                EndDate = null,
+                Status = "Scheduled",
+                Score = "0-0"
             };
 
             // Act
@@ -62,14 +64,14 @@ namespace NBABets.Tests.Unit
             // Arrange
             IGameAdapter gameAdapter = new GamesAdapter();
             var game = gameAdapter.Get("Brooklyn Nets vs Minnesota Timberwolves");
-            game.IsOpen = !game.IsOpen;
+            game.Status = "Live";
 
             // Act
             gameAdapter.Edit(game);
             var result = gameAdapter.Get(game.ID.ToString());
 
             // Assert
-            result?.IsOpen.ShouldBe(game.IsOpen);
+            result?.Status.ShouldBe(game.Status);
         }
 
         [Fact]
