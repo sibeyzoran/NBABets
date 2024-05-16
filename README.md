@@ -33,7 +33,7 @@ It was decided to create a client due to the ease of implementing future program
 1. Install the latest version of Visual Studio Preview 2022
 1. Ensure you have .NET 7 & 8 installed
 1. Clone the repository to your local disk
-1. Ensure that you have entered an API key for the NBA API in the secrets.json file in the API project
+1. Ensure that you have entered an API key for the [NBA API](https://rapidapi.com/api-sports/api/api-nba) in the secrets.json file in the API project
 1. Set the startup projects to include both the API project and the UI project
 1. Ensure that the correct port and url are set in the UI projects appsettings.json file. These should point to the API e.g. Port: 7148, ApiUrl: localhost
 1. Run the project!
