@@ -11,14 +11,14 @@
 
 @* Footer *@
 <FluentDialogFooter>
-    <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Submit</FluentButton>
+    <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Place Bet</FluentButton>
     <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
 </FluentDialogFooter>
 
 @* Body *@
 <FluentDialogBody>
     <FluentSelect Label="Select your winning team" Items="@Teams" OptionText="@(i => i.Text)" OptionValue="@(i => i.Value)" @bind-Value="@selectedTeam" />
-    <FluentNumberField @bind-Value="@Content.Amount">Enter your bet</FluentNumberField>
+    <FluentNumberField @bind-Value="@Content.Amount">Enter stake</FluentNumberField>
 </FluentDialogBody>
 
 
