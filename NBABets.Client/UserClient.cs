@@ -26,10 +26,9 @@ namespace NBABets.Client
             // Check to make sure the provided username isn't empty
             if (userName == null)
                 throw new ArgumentNullException(nameof(userName));
-
-            string endpoint = @$"authorise/{userName}";
-            string encodedEndpoint = Uri.EscapeDataString(endpoint);
-            var response = await GetAsync<UserDto>(encodedEndpoint);
+            string escapedUser = Uri.EscapeDataString(userName);
+            string endpoint = @$"authorise?userName={escapedUser}";
+            var response = await GetAsync<UserDto>(endpoint);
             return response;
         }
 

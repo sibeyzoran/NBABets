@@ -1,4 +1,3 @@
-using NBABets.Services;
 using Serilog;
 
 namespace NBABets.API
@@ -14,7 +13,7 @@ namespace NBABets.API
             Log.Logger = new LoggerConfiguration()
                  .WriteTo.File(logPath)
                  .Enrich.FromLogContext()
-                 .MinimumLevel.Debug()
+                 .MinimumLevel.Error()
                  .CreateLogger();
 
             // Add services to the container.

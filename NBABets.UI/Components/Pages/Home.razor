@@ -1,7 +1,141 @@
-﻿@page "/"
+﻿@inject AuthenticationStateProvider GetAuthenticationStateAsync
+@inject IDialogService dialogService
+@inject ApplicationState appState
+@inject NavigationManager navMan
+@inject IToastService toastService
 
-<PageTitle>Home</PageTitle>
+@page "/"
 
-<h1>Hello, world!</h1>
+@rendermode RenderMode.InteractiveServer
 
-Welcome to your new app.
+@if (!showGames)
+{
+    <FluentProgressRing></FluentProgressRing>
+}
+else
+{
+    <div>
+        <div>
+            @foreach (var game in allGames)
+            {
+                string[] logos = GetTeamLogos(game.Name);
+                <div class="game-item">
+                    <FluentCard>
+                        <div class="game-content">
+                            <div class="game-status">@game.Status</div>
+                            <div class="game-start-date">@game.StartDate</div>
+                            <div class="game-name">
+                                <img src="@logos[0]" style="width: 75px; height: 75px;" />
+                                @game.Name
+                                <img src="@logos[1]" style="width: 75px; height: 75px;" />
+                            </div>
+                            @if (game.Score != "0-0")
+                            {
+                                <div class="game-score">
+                                    @game.Score
+                                </div>
+                            }
+                            <div>
+                                <FluentButton Id="betButton" OnClick="@(() => BetButtonClicked(game))">Bet</FluentButton>
+                            </div>
+                        </div>
+                    </FluentCard>
+                </div>
+            }
+        </div>
+
+    </div>
+}
+
+
+
+@code
+{
+    // Variables
+    private string? activeid = "games";
+    private FluentTab? changedto;
+    private bool showGames = false;
+    private List<GameDto> allGames = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Get the username
+            var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+            var user = authstate.User;
+            string userName = user.Identity.Name;
+
+            // calls to the api via clients
+            using (var HttpClient = new HttpClient())
+            {
+                UserClient userClient = new UserClient(HttpClient);
+                UserDto userDto = await userClient.AuthoriseUser(userName);
+                appState.SetCurrentUser(userDto);
+            }
+
+            using (var HttpClient = new HttpClient())
+            {
+                // get the latest nba games
+                GameClient gameClient = new GameClient(HttpClient);
+                allGames = await gameClient.RetrieveGames();
+                // games = allGames.OrderBy(g => g.StartDate).AsQueryable();
+                allGames.OrderBy(g => g.StartDate);
+                showGames = true;
+            }
+
+
+        }
+        StateHasChanged();
+    }
+
+    private void HandleOnTabChange(FluentTab tab)
+    {
+        changedto = tab;
+    }
+
+    private string[] GetTeamLogos(string gameName)
+    {
+        // get logo paths
+        string[] splitNames = gameName.Split("VS");
+
+        string homeTeam = splitNames[0].Trim();
+        string homeTeamPNG = $"{homeTeam}.png";
+
+        string visitorTeam = splitNames[1].Trim();
+        string visitorTeamPNG = $"{visitorTeam}.png";
+
+        string[] result = new[]
+        {
+            $"images/{homeTeamPNG}",
+            $"images/{visitorTeamPNG}"
+        };
+
+        return result;
+    }
+
+    private async Task BetButtonClicked(GameDto game)
+    {
+        BetDto newBet = new BetDto()
+        {
+            ID = Guid.NewGuid(),
+            Game = game,
+            UserID = appState.CurrentUser.ID,
+            Name = game.Name
+        };
+
+        var dialog = await dialogService.ShowDialogAsync<BetDialog>(newBet, new DialogParameters()
+        {
+            Height = "300px",
+            Width = "500px",
+            Title = game.Name,
+            PreventScroll = true
+        });
+
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            toastService.ShowToast(ToastIntent.Success, "Bet submitted!");
+        }
+    }
+}

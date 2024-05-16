@@ -25,8 +25,8 @@ namespace NBABets.API
         /// </summary>
         /// <param name="userName"></param>
         /// <returns>Returns a user Dto which has a bit more information than a regular user object</returns>
-        [HttpGet("authorise/{userName}", Name = "Authorise")]
-        public ActionResult<UserDto> Authorise([FromRoute] string userName)
+        [HttpGet("authorise", Name = "Authorise")]
+        public ActionResult<UserDto> Authorise(string userName)
         {
             // Check if the user exists
             var user = _userAdapter.Get(userName);

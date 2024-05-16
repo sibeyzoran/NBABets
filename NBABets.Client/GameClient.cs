@@ -23,7 +23,7 @@ namespace NBABets.Client
 
         public async Task<List<GameDto>> RetrieveGames()
         {
-            string endpoint = "retrieve";
+            string endpoint = "retrievegames";
             var response = await GetListAsync<GameDto>(endpoint);
             return response;
         }

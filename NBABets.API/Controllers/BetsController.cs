@@ -59,7 +59,30 @@ namespace NBABets.API
             _log.Information($"Bet not found: {IDorName}");
             return BadRequest($"Bet not found: {IDorName}");
         }
+        /// <summary>
+        /// Gets a users current bets
+        /// </summary>
+        /// <param name="IDorName"></param>
+        /// <returns>a list of the users bets</returns>
+        [HttpGet("getusersbets")]
+        public ActionResult<List<BetDto>> GetUsersBets(string IDorName)
+        {
+            var bets = _betsAdapter.GetUsersBets(IDorName);
+            // map bets
+            List<BetDto> betDtos = bets.Select(bet =>
+            {
+                BetMapRequest request = new BetMapRequest { bet = bet };
+                return _betsMapper.Map(request);
+            }).ToList();
 
+            return betDtos;
+        }
+
+        /// <summary>
+        /// Adds a bet
+        /// </summary>
+        /// <param name="bet"></param>
+        /// <returns>the created users bet</returns>
         [HttpPost("add", Name = "AddBet")]
         public ActionResult<BetDto> AddBet([FromBody] BetDto bet)
         {

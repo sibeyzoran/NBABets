@@ -36,6 +36,16 @@ namespace NBABets.Client
             return response;
         }
 
+        public async Task<List<BetDto>> GetUsersBets(string IDorName)
+        {
+            string escaped = Uri.EscapeDataString(IDorName);
+            string endpoint = $"getusersbets?IDorName={escaped}";
+            var response = await GetListAsync<BetDto>(endpoint);
+            if (response == null)
+                return new List<BetDto>();
+            return response;
+        }
+
         public async Task<BetDto> AddBet(BetDto bet)
         {
             if (bet == null)
@@ -58,7 +68,7 @@ namespace NBABets.Client
 
         public async Task<bool> RemoveBet(string IDorName)
         {
-            string endpoint = $"{IDorName}";
+            string endpoint = $"delete/{IDorName}";
             var response = await DeleteAsync(endpoint);
             return response;
         }

@@ -1,0 +1,88 @@
+﻿@inject ApplicationState appState
+@inject NavigationManager navMan
+
+@page "/bets"
+
+@rendermode RenderMode.InteractiveServer
+
+@if (!showBets)
+{
+    <p>No bets found! Place a bet first!</p>
+}
+else
+{
+    <div>
+        <div class="bet-item">
+            <FluentCard Class="bet-card">
+                <FluentDataGrid Items="@FilteredItems" Pagination="@pagination" Style="overflow:auto;" TGridItem="BetDto" ResizableColumns="true">
+                    <PropertyColumn Title="Name" Property="@(b => b.Name)" Sortable="true">
+                        <ColumnOptions>
+                            <div class="search-box">
+                                <FluentSearch type="search" Autofocus="true" @bind-Value=betFilter @oninput="HandleNameFilter" @bind-Value:after="HandleClear" Placeholder="Filter via name..." />
+                            </div>
+                        </ColumnOptions>
+                    </PropertyColumn>
+                    <PropertyColumn Title="Amount" Property="@(b => b.Amount)" Sortable="true" />
+                    <PropertyColumn Title="Result" Property="@(b => b.Result)" Sortable="true" />
+                    <PropertyColumn Title="Scheduled Date" Property="@(b => b.Game.StartDate.ToString())" Sortable="true"/>
+                    <TemplateColumn Title="" Align="Align.Start">
+                        <FluentIcon Value="@(new Icons.Regular.Size20.Delete())" Color="@Color.Neutral" OnClick="@(() => DeleteBet(@context))" />
+                    </TemplateColumn>
+                </FluentDataGrid>
+            </FluentCard>
+        </div>
+    </div>
+}
+
+@code {
+    // Variables
+    private bool showBets = false;
+    private PaginationState pagination = new PaginationState { ItemsPerPage = 8 };
+    private IQueryable<BetDto>? bets;
+    private string betFilter = string.Empty;
+    private IQueryable<BetDto>? FilteredItems => bets?.Where(b => b.Name.Contains(betFilter, StringComparison.CurrentCultureIgnoreCase));
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Get the current users bets
+            using (HttpClient httpClient = new HttpClient())
+            {
+                BetClient betClient = new BetClient(httpClient);
+                var result = await betClient.GetUsersBets(appState.CurrentUser.ID.ToString());
+                bets = result.OrderBy(b => b.Name).AsQueryable();
+
+                showBets = bets.Any();
+            }
+        }
+        StateHasChanged();
+    }
+
+    private async Task DeleteBet(BetDto bet)
+    {
+        using (HttpClient httpClient = new HttpClient())
+        {
+            BetClient betClient = new BetClient(httpClient);
+            await betClient.RemoveBet(bet.ID.ToString());
+        }
+
+        navMan.Refresh(true);
+    }
+
+    private void HandleNameFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            betFilter = value;
+        }
+    }
+
+    private void HandleClear()
+    {
+        if (string.IsNullOrWhiteSpace(betFilter))
+        {
+            betFilter = string.Empty;
+        }
+    }
+}
