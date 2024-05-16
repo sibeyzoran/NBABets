@@ -122,15 +122,6 @@ namespace NBABets.API.Controllers
                     {
                         NBAGame game = JsonConvert.DeserializeObject<NBAGame>(gameJson.ToString());
                         games.Add(game);
-                        // get the logos
-                        string path = Path.Combine(@$"{Path.GetTempPath()}\NBALogos");
-
-                        if (Directory.GetFiles(path).Length != 29)
-                        {
-                            await DownloadLogos(game.teams.home.logo, game.teams.home.name + ".png");
-                            await DownloadLogos(game.teams.visitors.logo, game.teams.visitors.name + ".png");
-                        }
-
                     }
                 }
             }
@@ -208,31 +199,6 @@ namespace NBABets.API.Controllers
         {
             _log.Information($"Deleting game: {gameID.ToString()}");
             _gameAdapter.Delete(gameID.ToString());
-        }
-       
-        private async Task DownloadLogos(string logoUrl, string fileName)
-        {
-            // create path if it doesn't exist
-            string path = @$"{Path.GetTempPath()}\NBALogos";
-            string filePath = Path.Combine(path, fileName);
-            
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-
-            // only download if it doesn't exist
-            if (!System.IO.File.Exists(filePath))
-            {
-                using (var client = new WebClient())
-                {
-                    // wikimedia requires a user-agent header
-                    client.Headers.Add("User-Agent", "NBABetsAPI/1.0");
-                    _log.Information($"Downloading logo: {logoUrl}");
-                    await client.DownloadFileTaskAsync(logoUrl, filePath);
-
-                }
-            }
         }
 
         private void UpdateSecretsJson()

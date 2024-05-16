@@ -14,5 +14,9 @@ namespace NBABets.Models
         public GameDto Game { get; set; }
         public Guid UserID { get; set; }
         public string Result { get; set; }
+        public BetDto()
+        {
+            Game = new GameDto();
+        }
     }
 }

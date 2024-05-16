@@ -2,6 +2,7 @@
 using Microsoft.FluentUI.AspNetCore.Components;
 using NBABets.Client;
 using Serilog;
+using System.Text.Json;
 
 namespace NBABets.UI.Components
 {

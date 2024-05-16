@@ -1,0 +1,91 @@
+﻿@implements IDialogContentComponent<BetDto>
+
+@* Header *@
+<FluentDialogHeader>
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentLabel Typo="Typography.PaneHeader" Style="align-items:center">
+            @Dialog.Instance.Parameters.Title
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
+
+@* Footer *@
+<FluentDialogFooter>
+    <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Submit</FluentButton>
+    <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
+</FluentDialogFooter>
+
+@* Body *@
+<FluentDialogBody>
+    <FluentSelect Label="Select your winning team" Items="@Teams" OptionText="@(i => i.Text)" OptionValue="@(i => i.Value)" @bind-Value="@selectedTeam" />
+    <FluentNumberField @bind-Value="@Content.Amount">Enter your bet</FluentNumberField>
+</FluentDialogBody>
+
+
+@code {
+    [Parameter]
+    public BetDto Content { get; set; } = default!;
+
+    [CascadingParameter]
+    public FluentDialog Dialog { get; set; } = default!;
+
+    private List<Option<string>> Teams = new List<Option<string>>();
+    private string selectedTeam = string.Empty;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // create the options of teams
+            string[] teamsSplit = Content.Name.Split("VS");
+            string homeTeam = teamsSplit[0].Trim();
+            string visitorTeam = teamsSplit[1].Trim();
+            Option<string> homeOption = new Option<string>
+                {
+                    Value = homeTeam,
+                    Text = homeTeam
+                };
+            Option<string> visitorOption = new Option<string>
+                {
+                    Value = visitorTeam,
+                    Text = visitorTeam
+                };
+            Teams.Add(homeOption);
+            Teams.Add(visitorOption);
+            selectedTeam = homeTeam;
+        }
+
+        StateHasChanged();
+
+    }
+    private async Task SaveAsync()
+    {
+        // craft the name
+        string betName = string.Empty;
+        foreach (var name in Teams)
+        {
+            if (name.Value != selectedTeam)
+            {
+                betName = $"{selectedTeam} to win VS {name.Value}";
+            }
+        }
+        Content.Name = betName;
+        Content.Result = "Awaiting result";
+
+        // submit the bet
+        if (Content.Amount != null)
+        {
+            using (HttpClient httpClient = new HttpClient())
+            {
+                BetClient betClient = new BetClient(httpClient);
+                await betClient.AddBet(Content);
+            }
+        }
+
+        await Dialog.CloseAsync();
+    }
+    private async Task CancelAsync()
+    {
+        await Dialog.CancelAsync();
+    }
+}

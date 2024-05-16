@@ -4,6 +4,8 @@ html {
 
 a, .btn-link {
     color: #006bb7;
+    color: black; 
+    text-decoration: none; 
 }
 
 .btn-primary {
@@ -25,13 +27,14 @@ body {
     font-family: var(--body-font);
     font-size: var(--type-ramp-base-font-size);
     line-height: var(--type-ramp-base-line-height);
-    margin: 0;
 }
 
 .body-content {
     align-self: stretch;
     height: unset !important;
     display: flex;
+    align-items: center;
+    margin: 0;
 }
 
 h1:focus {

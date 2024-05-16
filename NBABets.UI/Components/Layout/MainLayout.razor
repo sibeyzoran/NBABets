@@ -1,29 +1,45 @@
 ﻿@inherits LayoutComponentBase
 
-<FluentLayout Style="display:flex; height:auto; align-items: center;">
-    <FluentHeader Style="background-color:white; color: black;">
-        <img src="images/spinningball.gif" alt="Loading..." style="width: 75px; height: 75px;" />
-        <h1>NBA Bets</h1>
-    </FluentHeader>
-    <FluentBodyContent>
-        <FluentStack Orientation="Orientation.Horizontal" Style="justify-content: space-between;">
-            <main style="width:auto;">
-                <div class="content">
-                    <article id="article">
-                        @Body
-                    </article>
-                </div>
-                <FluentToastProvider @rendermode="RenderMode.InteractiveServer" />
-                <FluentDialogProvider @rendermode="RenderMode.InteractiveServer" />
-            </main>
-        </FluentStack>
-    </FluentBodyContent>
-    <FluentFooter>
-        <div class="link1">
-            Created by James Martin  
+<div style="display: flex; flex-direction: column; align-items: center;">
+
+    <!-- Header Section -->
+    <div style="display: flex; align-items: center;">
+        <div>
+            <img src="images/spinningball.gif" style="width: 75px; height: 75px;" />
         </div>
-        <div class="link2">
+        <div style="margin-left: 5px;">
+            <a href="/">
+                <h1>NBA Bets</h1>
+            </a>
+        </div>
+    </div>
+    <div>
+        <a href="/bets">
+            Check your bets
+        </a>
+    </div>
+
+    <!-- Body Content Section -->
+    <div style="width: auto;">
+        <div class="content">
+            <article id="article">
+                @Body
+            </article>
+        </div>
+        <FluentToastProvider @rendermode="RenderMode.InteractiveServer" />
+        <FluentDialogProvider @rendermode="RenderMode.InteractiveServer" />
+    </div>
+
+    <!-- Footer Section -->
+    <div>
+        <div class="link1">
+            Created by James Martin
+        </div>
+        <div class="link2" style="text-align:center">
             <a href="https://github.com/sibeyzoran/NBABets" target="_blank">GitHub</a>
         </div>
-    </FluentFooter>
-</FluentLayout>
+    </div>
+
+</div>
+
+
