@@ -1,5 +1,5 @@
 # NBABets
-A simple UI and API that interacts with a SQLite database to place bets on upcoming NBA games. It implements data adapters to perform CRUD operations on the SQLite database, these are called "Services". There is a service for each table: Users, Bets, Games. Unit tests have been written to assure their performance. A test playlist should come with the repository but, if not, the unit tests should be executed in the following order:
+A simple UI and API that interacts with a SQLite database to place bets on **upcoming** NBA games. It implements data adapters to perform CRUD operations on the SQLite database, these are called "Services". There is a service for each table: Users, Bets, Games. Unit tests have been written to assure their performance. A test playlist should come with the repository but, if not, the unit tests should be executed in the following order:
 
 ## Users tests
 1. SuccessfullyAddUser
@@ -56,3 +56,4 @@ It was decided to create a client due to the ease of implementing future program
 1. A cleaner login splash screen that implements oAuth (allows for logins from more places e.g. Gmail, Azure more seamlessly)
 1. A sign up process - currently as soon as someone successfully authenticates their user is created in the database
 1. Streaming of scores - if a game is live currently it will  grab the score but won't update it as the game is being played
+1. It only shows upcoming games. If there are no games it will retrieve nothing.
