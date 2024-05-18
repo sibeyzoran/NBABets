@@ -8,6 +8,8 @@
 
 @rendermode RenderMode.InteractiveServer
 
+
+
 @if (!showGames)
 {
     <FluentProgressRing></FluentProgressRing>
@@ -22,7 +24,7 @@ else
                 <div class="game-item">
                     <FluentCard>
                         <div class="game-content">
-                            <div class="game-status">@game.Status</div>
+                            <div class="game-status @(game.Status == "In Play" ? "in-play" : "")">@game.Status</div>
                             <div class="game-start-date">@game.StartDate</div>
                             <div class="game-name">
                                 <img src="@logos[0]" style="width: 75px; height: 75px;" />

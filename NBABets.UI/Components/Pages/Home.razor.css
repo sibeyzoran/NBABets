@@ -26,6 +26,9 @@
     padding: 5px;
     border-radius: 5px;
 }
+.game-status.in-play {
+        background-color: green;
+}
 
 .game-content {
     display: flex;
