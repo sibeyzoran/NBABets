@@ -38,6 +38,18 @@ It was decided to create a client due to the ease of implementing future program
 1. Ensure that the correct port and url are set in the UI projects appsettings.json file. These should point to the API e.g. Port: 7148, ApiUrl: localhost
 1. Run the project!
 
+#Screenshots
+## Home page
+![image](https://github.com/sibeyzoran/NBABets/assets/31067342/fd01e1a5-b172-427b-b74c-b014f5b50e66)
+
+## Betting dialog
+![image](https://github.com/sibeyzoran/NBABets/assets/31067342/fae31aeb-dcc2-4843-ad2b-52e78f107886)
+
+
+## Your bets page
+![image](https://github.com/sibeyzoran/NBABets/assets/31067342/92f13b0a-78b3-4fbc-ad2f-e74b45eb7e3a)
+
+
 # Things to improve
 1. More tests - API tests in particular. Mock responses/API could be used here effectively.
 1. Small frontend design touches - $ signs to be added wherever there is an amount. Currently they're doubles.
