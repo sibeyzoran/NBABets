@@ -38,7 +38,7 @@ It was decided to create a client due to the ease of implementing future program
 1. Ensure that the correct port and url are set in the UI projects appsettings.json file. These should point to the API e.g. Port: 7148, ApiUrl: localhost
 1. Run the project!
 
-#Screenshots
+# Screenshots
 ## Home page
 ![image](https://github.com/sibeyzoran/NBABets/assets/31067342/fd01e1a5-b172-427b-b74c-b014f5b50e66)
 
