@@ -57,3 +57,4 @@ It was decided to create a client due to the ease of implementing future program
 1. A sign up process - currently as soon as someone successfully authenticates their user is created in the database
 1. Streaming of scores - if a game is live currently it will  grab the score but won't update it as the game is being played
 1. It only shows upcoming games. If there are no games it will retrieve nothing.
+1. Create relationships between tables in SQLite
